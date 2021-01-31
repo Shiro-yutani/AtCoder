@@ -33,6 +33,7 @@
 using namespace std;
 
 string getStr();
+string erase_and_log(list<string>::iterator, int);
 
 int main(){
     list<string> strList;
@@ -58,7 +59,7 @@ int main(){
     cout << "N=" << length <<endl;
 #endif
 
-    strList.push_back(erase_and_log(&(strList.begin()), length));
+    strList.push_back( erase_and_log(strList.begin(), length) );
 
     return 0;
 }
@@ -69,14 +70,22 @@ string getStr(){
     return str;
 }
 
-string erase_and_log(string *str, int l){
+string erase_and_log(list<string>::iterator itr, int l){
     string *ret;
+    int ret_l;
     
     for(int i=0; i<l; i++){
-        for(int j=(*ret).begin(); j!=(*ret).end();){
-            *(str+i) == *j ? *ret.erase(j) : j++;
+        ret_l = (*ret).size();
+        for(int j=0; j<ret_l;){
+            if(*itr == *(ret+j)){
+                (*ret).erase((*ret).begin() + j);
+                ret_l--;
+                (*ret).push_back(*itr);
+            } else {
+                j++;
+            }
         }
     }
 
-    return ret;
+    return *ret;
 }
