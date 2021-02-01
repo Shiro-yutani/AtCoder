@@ -25,67 +25,58 @@
 
 #include<iostream>
 #include<string>
-#include<list>
+#include <algorithm>
+//#include<regex>
 
 #define _Debug
-#define NUM_OF_INPUT 1
 
 using namespace std;
 
-string getStr();
-string erase_and_log(list<string>::iterator, int);
+//関数プロトタイプ宣言
+string delete_specific_char(string, char);
+char extract_char_from_string(string, int);
 
+//メイン関数
 int main(){
-    list<string> strList;
-    list<string>::iterator itr; //イテレータ
-    int i, length;
+    string str, t_str;
+    int n, i;
+    char ext;
+    bool str_length_input_success = false;
 
+    //文字列の長さを取得
+    cin >> n;
 
-    for(i=0; i<NUM_OF_INPUT; i++){
-        strList.push_back(getStr());
+    //文字列を取得
+    while(!str_length_input_success){ //文字列の長さがnでなければ再取得する
+        cin >> str;
+        if(str.size()==n) str_length_input_success = true; //文字列の長さがnであればフラグ解除
     }
 
-#ifdef _Debug
-    cout << "strList = {";
-    for(itr = strList.begin(); itr != strList.end(); itr++){
-        cout << *itr << ", ";
-    }
-    cout << "}" << endl;
-#endif
+    for(i=0; i<n; i++){
+        ext = extract_char_from_string(str, i);
+        t_str = delete_specific_char(t_str, ext);
+        t_str.push_back(ext);
+    }    
 
-    length = (*(strList.begin())).size();
-
-#ifdef _Debug
-    cout << "N=" << length <<endl;
-#endif
-
-    strList.push_back( erase_and_log(strList.begin(), length) );
+    cout << t_str;
 
     return 0;
 }
 
-string getStr(){
-    string str;
-    cin >> str;
-    return str;
+/*  関数名          delete_specific_cah()
+    説明            string s から 文字 c を削除し返す
+    使用ライブラリ  algorithm
+*/
+string delete_specific_char(string s, char c){
+    s.erase(remove(s.begin(), s.end(), c), s.end());
+    return s;
 }
 
-string erase_and_log(list<string>::iterator itr, int l){
-    string *ret;
-    int ret_l;
-    
-    for(int i=0; i<l; i++){
-        ret_l = (*ret).size();
-        for(int j=0; j<ret_l;){
-            if(*itr == *(ret+j)){
-                (*ret).erase((*ret).begin() + j);
-                ret_l--;
-                (*ret).push_back(*itr);
-            } else {
-                j++;
-            }
-        }
-    }
-
-    return *ret;
+/*  関数名          extract_char_from_string()
+    説明            string s の左から i 番目の文字を取り出す
+    使用ライブラリ  なし
+*/
+char extract_char_from_string(string s, int i){
+    char c = s[i];
+    return c;
 }
