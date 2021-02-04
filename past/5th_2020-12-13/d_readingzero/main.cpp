@@ -23,10 +23,9 @@
 #include<string>
 #include<vector>
 
+#define _debug
+
 using namespace std;
-
-//関数プロトタイプ宣言
-
 
 //クラス定義
 class StringNumber{
@@ -38,19 +37,39 @@ class StringNumber{
         StringNumber(string str) : m_str(str){}
         int getValue();        
         int getNumOfZero();
+        string getString();
 
 };
+
+//関数プロトタイプ宣言
+vector<StringNumber> StringNumberSort(vector<StringNumber>);
 
 int main(void){
     int N; //文字列の個数
     vector<StringNumber> strList; //文字列のリスト
     string strTmp;
+    vector<StringNumber>::iterator itr;
 
     cin >> N;
+#ifdef _debug
+    cout << "[" << __func__ << ":" << __LINE__ << "] " << "Input N finished. N=" << N << endl;
+#endif //_debug
 
     for(int i=0; i<N; i++){
         cin >> strTmp;
         strList.push_back(StringNumber(strTmp));
+    }
+#ifdef _debug
+    for(itr=strList.begin(); itr!=strList.end(); itr++){
+        cout << "[" << __func__ << ":" << __LINE__ << "] itr->getZumOfZero() = " << itr->getNumOfZero() << ", itr->getValue() = " << itr->getValue() << endl;
+    }
+    cout << endl;
+#endif //_debug
+
+    strList = StringNumberSort(strList);
+
+    for(itr=strList.begin(); itr!=strList.end(); itr++){
+        cout << itr->getString() << endl;
     }
 
     return 0;
@@ -58,4 +77,51 @@ int main(void){
 
 int StringNumber::getValue(){
     return atoi(m_str.c_str());
+}
+
+int StringNumber::getNumOfZero(){
+    int i;
+    for(i=0; m_str[i] == '0'; i++){
+    }
+    return i;
+}
+
+string StringNumber::getString(){
+    return m_str;
+}
+
+vector<StringNumber> StringNumberSort(vector<StringNumber> StrNum){
+    vector<StringNumber>::iterator itr, itr_for_comp, itr_tmp;
+    bool sort_finished_flg = false;
+
+    while(!sort_finished_flg){
+        sort_finished_flg = true; //フラグ解除
+
+        itr=StrNum.begin();
+        itr_for_comp =itr;
+        itr_for_comp++;
+
+        while(itr<StrNum.end()){
+#ifdef _debug
+            cout << "[" << __func__ << ":" << __LINE__ << "] itr->getValue:" << itr->getValue() << ", itr_for_comp->getValue:" << itr_for_comp->getValue() << endl;
+#endif
+            if((itr->getValue() > itr_for_comp->getValue()) || // itr+1 のほうが値が小さい場合
+                (itr->getValue() == itr_for_comp->getValue() && itr->getNumOfZero() < itr_for_comp->getNumOfZero()) ){ // itrとitr+1 は同じ値、かつitr+1のほうがゼロが多い場合
+#ifdef _debug
+                cout << "Sorting start." <<endl;
+#endif
+                *itr_tmp = *itr;    //入れ替え操作開始
+                *itr = *itr_for_comp;
+                *itr_for_comp = *itr_tmp;
+                sort_finished_flg = false; //入れ替え実施したのでフラグをもとに戻す
+#ifdef _debug
+                cout << "Sorting finished." <<endl;
+#endif
+            }
+            itr++;
+            itr_for_comp++;
+        }
+    }
+
+    return StrNum;
 }
