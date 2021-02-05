@@ -22,6 +22,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<algorithm>
 
 #define _debug
 
@@ -99,29 +100,38 @@ vector<StringNumber> StringNumberSort(vector<StringNumber> StrNum){
 
         itr=StrNum.begin();
         itr_for_comp =itr;
-        itr_for_comp++;
 
-        while(itr<StrNum.end()){
+        while(itr_for_comp!=StrNum.end()-1){
+#ifdef _debug
+            cout << "[" << __func__ << ":" << __LINE__ << "] cycle start." << endl;
+#endif
+            itr_for_comp++;
 #ifdef _debug
             cout << "[" << __func__ << ":" << __LINE__ << "] itr->getValue:" << itr->getValue() << ", itr_for_comp->getValue:" << itr_for_comp->getValue() << endl;
 #endif
             if((itr->getValue() > itr_for_comp->getValue()) || // itr+1 のほうが値が小さい場合
                 (itr->getValue() == itr_for_comp->getValue() && itr->getNumOfZero() < itr_for_comp->getNumOfZero()) ){ // itrとitr+1 は同じ値、かつitr+1のほうがゼロが多い場合
 #ifdef _debug
-                cout << "Sorting start." <<endl;
+                cout << "Swapping start." <<endl;
 #endif
-                *itr_tmp = *itr;    //入れ替え操作開始
-                *itr = *itr_for_comp;
-                *itr_for_comp = *itr_tmp;
+                iter_swap(itr, itr_for_comp);
                 sort_finished_flg = false; //入れ替え実施したのでフラグをもとに戻す
 #ifdef _debug
-                cout << "Sorting finished." <<endl;
+                cout << "Swapping finished." <<endl;
 #endif
             }
+#ifdef _debug
+            cout << "[" << __func__ << ":" << __LINE__ << "] itr->getValue:" << itr->getValue() << endl;
+#endif
             itr++;
-            itr_for_comp++;
+#ifdef _debug
+            cout << "[" << __func__ << ":" << __LINE__ << "] 1 cycle finished." << endl;
+#endif
         }
     }
+#ifdef _debug
+    cout << "Sorting finished";
+#endif
 
     return StrNum;
 }
