@@ -75,12 +75,12 @@ int main(){
             }
         }
 
-        if(yb_jdg==true || yt_jdg==true){
+        if(yb_jdg|yt_jdg){
     //        cout << __LINE__ << ": yt=" << yt << ", yb=" << yb << endl;
             res += (yt-yb)/scale+1;
         }
 
-        char f='x';
+    //    char f='x';
     //    cout << __LINE__ << ": x=" << cx << ", yt=" << (yt_jdg==true ? yt : f) << ", yb=" << (yb_jdg==true ? yb : f) << ", res=" << res << endl;
     }
 
